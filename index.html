@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographic: The Optimized Renewable Microgrid</title>
+    <!-- Chosen Palette: Energetic & Playful -->
+    <!-- Application Structure Plan: The infographic follows a narrative structure to tell a story: 1. The Problem (visualizing the high energy demand), 2. The Solution (presenting the optimal tech mix), 3. How it Works (a detailed energy flow diagram showing the 24-hour balance), 4. The Cost (breaking down capital investment), and 5. The Payoff (showing the final energy price). This top-down approach makes the complex data digestible for a general audience, starting broad and then drilling into the details. -->
+    <!-- Visualization & Content Choices: Load Profile -> Bar Chart (Compare); Tech Mix -> Icon Cards (Inform); Energy Flow -> HTML/CSS Diagram (Organize); Cost Breakdown -> Donut Chart (Compare proportions); Financials -> Big Number Cards (Inform). This mix avoids overwhelming users with too many complex charts, using simple, clear visuals for each piece of the narrative. All charts are Chart.js/Canvas. The flow diagram is built with Tailwind CSS. This supports the narrative structure by providing varied and appropriate visual anchors for each section. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 300px; max-height: 40vh; }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        .gradient-bg { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); }
+        .stat-card { background: rgba(255,255,255,0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        .flow-arrow {
+            position: relative;
+            width: 1.5rem; /* w-6 */
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .flow-arrow::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 12px solid currentColor;
+        }
+    </style>
+</head>
+<body class="gradient-bg text-[#073B4C]">
+
+    <div class="container mx-auto px-4 py-8 md:py-16">
+
+        <header class="text-center mb-16">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-[#073B4C]">Powering the Future, Remotely.</h1>
+            <p class="mt-4 text-lg md:text-xl text-[#118AB2] max-w-3xl mx-auto">A visual deep-dive into the design of a cost-optimized, 100% renewable microgrid for a remote community.</p>
+        </header>
+
+        <main class="space-y-24 md:space-y-32">
+
+            <section id="problem">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold">The Daily Energy Challenge</h2>
+                    <p class="mt-2 text-md text-[#118AB2] max-w-2xl mx-auto">A remote community needs reliable power 24/7. The challenge lies in meeting the high energy demand, especially during the evening peak when solar power is virtually non-existent.</p>
+                </div>
+                <div class="mt-8 md:mt-12 p-6 md:p-8 rounded-2xl shadow-2xl stat-card">
+                    <div class="chart-container">
+                        <canvas id="loadChart"></canvas>
+                    </div>
+                     <p class="text-center mt-4 text-sm text-gray-600">The chart shows the community's electricity demand in kilowatts (kW) throughout the day, peaking at 50 kW in the evening.</p>
+                </div>
+            </section>
+
+            <section id="solution">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold">The Optimal Technology Mix</h2>
+                    <p class="mt-2 text-md text-[#118AB2] max-w-2xl mx-auto">To meet the demand at the lowest initial cost, a balanced system of renewable sources was designed. Each component plays a critical role in the 24-hour energy cycle.</p>
+                </div>
+                <div class="mt-8 md:mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="p-6 rounded-2xl shadow-lg text-center stat-card">
+                        <p class="text-6xl">💧</p>
+                        <h3 class="mt-4 text-2xl font-bold text-[#118AB2]">Micro-Hydro</h3>
+                        <p class="text-4xl font-extrabold mt-2">20.00 <span class="text-lg font-semibold">kW</span></p>
+                        <p class="mt-2 text-sm">Provides constant, reliable baseload power day and night.</p>
+                    </div>
+                     <div class="p-6 rounded-2xl shadow-lg text-center stat-card">
+                        <p class="text-6xl">💨</p>
+                        <h3 class="mt-4 text-2xl font-bold text-[#06D6A0]">Wind Power</h3>
+                        <p class="text-4xl font-extrabold mt-2">26.00 <span class="text-lg font-semibold">kW</span></p>
+                         <p class="mt-2 text-sm">Generates a large surplus at night, perfect for charging the battery.</p>
+                    </div>
+                    <div class="p-6 rounded-2xl shadow-lg text-center stat-card">
+                        <p class="text-6xl">☀️</p>
+                        <h3 class="mt-4 text-2xl font-bold text-[#FFD166]">Solar PV</h3>
+                        <p class="text-4xl font-extrabold mt-2">35.50 <span class="text-lg font-semibold">kW</span></p>
+                        <p class="mt-2 text-sm">Meets the bulk of the high daytime energy demand.</p>
+                    </div>
+                    <div class="p-6 rounded-2xl shadow-lg text-center stat-card">
+                        <p class="text-6xl">🔋</p>
+                        <h3 class="mt-4 text-2xl font-bold text-[#FF6B6B]">Battery Storage</h3>
+                        <p class="text-4xl font-extrabold mt-2">208.6 <span class="text-lg font-semibold">kWh</span></p>
+                        <p class="mt-2 text-sm">Stores nighttime surplus to cover the evening power deficit.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="process">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold">How It Works: The 24-Hour Energy Flow</h2>
+                    <p class="mt-2 text-md text-[#118AB2] max-w-3xl mx-auto">The system dynamically balances energy generation, storage, and consumption. Here's a simplified look at the energy journey from source to use during the three key periods of the day.</p>
+                </div>
+                 <div class="mt-12 space-y-8">
+                     <div class="p-6 rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-12 gap-4 items-center stat-card">
+                        <div class="md:col-span-3 text-center">
+                             <h3 class="text-xl font-bold">Night (12am-8am)</h3>
+                             <p class="text-sm">Low Demand, High Wind</p>
+                        </div>
+                        <div class="md:col-span-8 flex flex-col md:flex-row items-center gap-4 text-center">
+                           <div class="flex items-center gap-2"><div class="p-3 bg-[#118AB2]/20 rounded-lg">💧</div><div class="p-3 bg-[#06D6A0]/20 rounded-lg">💨</div></div>
+                           <div class="flow-arrow text-[#06D6A0]"></div>
+                           <div class="p-3 bg-[#FF6B6B]/20 rounded-lg">🔋</div>
+                        </div>
+                         <p class="md:col-span-12 text-center text-sm mt-2 md:mt-0 text-gray-600">Surplus energy from strong wind generation is used to charge the battery.</p>
+                    </div>
+                     <div class="p-6 rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-12 gap-4 items-center stat-card">
+                        <div class="md:col-span-3 text-center">
+                             <h3 class="text-xl font-bold">Day (8am-6pm)</h3>
+                             <p class="text-sm">High Demand, High Solar</p>
+                        </div>
+                         <div class="md:col-span-8 flex flex-col md:flex-row items-center gap-4 text-center">
+                            <div class="flex items-center gap-2"><div class="p-3 bg-[#118AB2]/20 rounded-lg">💧</div><div class="p-3 bg-[#06D6A0]/20 rounded-lg">💨</div><div class="p-3 bg-[#FFD166]/20 rounded-lg">☀️</div></div>
+                           <div class="flow-arrow text-[#FFD166]"></div>
+                           <div class="p-3 bg-gray-700/20 rounded-lg">🏠</div>
+                        </div>
+                         <p class="md:col-span-12 text-center text-sm mt-2 md:mt-0 text-gray-600">Generation perfectly matches the load. The system is self-sufficient.</p>
+                    </div>
+                     <div class="p-6 rounded-2xl shadow-xl grid grid-cols-1 md:grid-cols-12 gap-4 items-center stat-card">
+                        <div class="md:col-span-3 text-center">
+                             <h3 class="text-xl font-bold">Evening (6pm-12am)</h3>
+                             <p class="text-sm">Peak Demand, Low Generation</p>
+                        </div>
+                         <div class="md:col-span-8 flex flex-col md:flex-row items-center gap-4 text-center">
+                           <div class="p-3 bg-[#FF6B6B]/20 rounded-lg">🔋</div>
+                           <div class="flow-arrow text-[#FF6B6B]"></div>
+                           <div class="p-3 bg-gray-700/20 rounded-lg">🏠</div>
+                        </div>
+                         <p class="md:col-span-12 text-center text-sm mt-2 md:mt-0 text-gray-600">The battery discharges its stored energy to meet the community's peak demand.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="cost">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold">The Investment: Capital Cost Breakdown</h2>
+                    <p class="mt-2 text-md text-[#118AB2] max-w-2xl mx-auto">The total upfront cost is driven primarily by Solar PV and the Battery system, which are essential for balancing the grid and meeting peak demand.</p>
+                </div>
+                 <div class="mt-8 md:mt-12 grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+                    <div class="lg:col-span-3 p-6 md:p-8 rounded-2xl shadow-2xl stat-card">
+                        <div class="chart-container">
+                            <canvas id="costChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-2 space-y-6 text-center">
+                        <div class="p-6 rounded-2xl shadow-lg stat-card">
+                            <h3 class="text-lg font-semibold text-[#118AB2]">Total Initial Cost</h3>
+                            <p class="text-5xl font-extrabold text-[#073B4C]">272,290 <span class="text-2xl align-middle">JoD</span></p>
+                        </div>
+                        <div class="p-6 rounded-2xl shadow-lg stat-card">
+                            <h3 class="text-lg font-semibold text-[#118AB2]">Annual Loan Repayment</h3>
+                             <p class="text-5xl font-extrabold text-[#073B4C]">31,920 <span class="text-2xl align-middle">JoD</span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+             <section id="payoff">
+                <div class="text-center">
+                     <h2 class="text-3xl font-bold">The Payoff: Affordable, Clean Energy</h2>
+                    <p class="mt-2 text-md text-[#118AB2] max-w-2xl mx-auto">To be financially viable over the 10-year loan period, the system must sell its electricity at a minimum price. This price reflects the total investment required to provide 100% renewable, reliable power.</p>
+                </div>
+                 <div class="mt-8 md:mt-12 max-w-md mx-auto p-8 rounded-2xl shadow-2xl text-center stat-card">
+                     <h3 class="text-2xl font-bold text-[#118AB2]">Minimum Selling Price</h3>
+                     <p class="my-2 text-7xl font-extrabold text-[#073B4C]">0.1017</p>
+                     <p class="text-2xl font-semibold text-gray-700">JoD / kWh</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="mt-24 md:mt-32 pt-8 border-t border-white/20 text-center text-sm text-[#073B4C]/80">
+            <p>This infographic visualizes the findings from the "Design and Optimization of an Off-Grid Renewable Microgrid" report.</p>
+            <p>All data is based on the specific constraints and assumptions of the original coursework.</p>
+        </footer>
+    </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const chartColors = {
+        load: '#FF6B6B',
+        hydro: '#118AB2',
+        wind: '#06D6A0',
+        solar: '#FFD166',
+        battery: '#EF476F', 
+        textDark: '#073B4C',
+        textLight: '#118AB2'
+    };
+
+    const tooltipTitleCallback = (tooltipItems) => {
+        const item = tooltipItems[0];
+        let label = item.chart.data.labels[item.dataIndex];
+        return Array.isArray(label) ? label.join(' ') : label;
+    };
+    
+    const wrapLabel = (label) => {
+        const maxLength = 16;
+        if (label.length <= maxLength) return label;
+        
+        const words = label.split(' ');
+        const lines = [];
+        let currentLine = '';
+        
+        words.forEach(word => {
+            if ((currentLine + word).length > maxLength) {
+                lines.push(currentLine.trim());
+                currentLine = '';
+            }
+            currentLine += word + ' ';
+        });
+        lines.push(currentLine.trim());
+        return lines.filter(line => line.length > 0);
+    };
+
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: {
+                    color: chartColors.textDark,
+                    font: { weight: '600' }
+                }
+            },
+            tooltip: {
+                backgroundColor: 'rgba(7, 59, 76, 0.9)',
+                titleFont: { size: 14, weight: 'bold' },
+                bodyFont: { size: 12 },
+                padding: 12,
+                cornerRadius: 8,
+                callbacks: {
+                    title: tooltipTitleCallback
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(7, 59, 76, 0.1)' },
+                ticks: { color: chartColors.textLight, font: { weight: '600' } },
+            },
+            x: {
+                grid: { display: false },
+                ticks: { color: chartColors.textLight, font: { weight: '600' } },
+            }
+        }
+    };
+
+    const loadCtx = document.getElementById('loadChart').getContext('2d');
+    new Chart(loadCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Night (12am-8am)', 'Day (8am-6pm)', 'Evening (6pm-12am)'],
+            datasets: [{
+                label: 'Load Demand (kW)',
+                data: [20, 40, 50],
+                backgroundColor: chartColors.load,
+                borderRadius: 8,
+                barPercentage: 0.6
+            }]
+        },
+        options: {
+            ...commonOptions,
+            plugins: {
+                ...commonOptions.plugins,
+                legend: { display: false }
+            },
+             scales: {
+                ...commonOptions.scales,
+                y: { ...commonOptions.scales.y, title: { display: true, text: 'Power Demand (kW)', color: chartColors.textDark } }
+             }
+        }
+    });
+
+    const costCtx = document.getElementById('costChart').getContext('2d');
+    new Chart(costCtx, {
+        type: 'doughnut',
+        data: {
+            labels: [wrapLabel('Micro-Hydro Power'), wrapLabel('Wind Power'), wrapLabel('Solar PV System'), wrapLabel('Battery Storage System')],
+            datasets: [{
+                label: 'Cost (JoD)',
+                data: [20000, 39000, 106500, (104287.5 + 2502.5)],
+                backgroundColor: [chartColors.hydro, chartColors.wind, chartColors.solar, chartColors.battery],
+                borderColor: '#f5f7fa',
+                borderWidth: 4,
+                hoverOffset: 15
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '60%',
+            plugins: {
+                 ...commonOptions.plugins,
+                legend: {
+                    position: 'bottom',
+                    ...commonOptions.plugins.legend
+                },
+                tooltip: {
+                    ...commonOptions.plugins.tooltip,
+                    callbacks: {
+                         title: tooltipTitleCallback,
+                         label: function(context) {
+                            let value = context.parsed;
+                            return ` ${value.toLocaleString()} JoD`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
